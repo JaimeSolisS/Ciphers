@@ -11,7 +11,31 @@ def caesar(text,key):
         else: encripted += c
     return encripted  
 
-def menu():
+#----------Cifrado de Vigenere--------------------#
+def generateKey(text, key): 
+    key = list(key) 
+    if len(text) == len(key): 
+        return(key) 
+    else: 
+        for i in range(len(text) - len(key)):
+                if text[i].isalpha():
+                    key.append(key[i % len(key)]) 
+                else: continue
+    return("" . join(key)) 
+
+def vigenere(text, key): 
+    encripted = "" 
+    for i in range(len(text)): 
+        c = text[i] # cada caracter
+        if c.isalpha(): #si el caracter es una letra hacemos la transposicion, si no, regresamos el caracter
+            if (ord(c) + ord(key[i]) - 97) > 122: # si la operación da igual a +123, se reinicia el alfabeto  
+                encripted += chr((ord(c) + ord(key[i]) - 97 )-26) 
+            else: encripted += chr((ord(c) + ord(key[i]) - 97 )) #ascii del caracter del mensaje + ascii de la llave - 97(ascii de 'a')
+        else: encripted += c
+    return encripted  
+
+
+def main():
     while True:
         print("************Ciphers**************")
         print()
@@ -28,12 +52,17 @@ def menu():
             print()
             text = input("Escribe mensaje: ")
             key = input("Letra de la llave: ")
-            print ("Texto plano  : ", text )
-            print ("Llave : ", str(key) )
+            print ("Texto plano:   ", text )
+            print ("Llave:         ", str(key) )
             print ("Texto cifrado: ", caesar(text,key) )
             print()
         elif choice == "b" or choice =="B":
-            pass
+            text = input("Escribe mensaje: ")
+            keySequence = input("Secuencia de la llave: ")
+            key = generateKey(text, keySequence) 
+            print ("Texto plano:   ", text )
+            print ("Llave:         ", str(key) )
+            print ("Texto cifrado: ", vigenere(text,key)  )
         elif choice == "c" or choice =="C":
             pass
         elif choice=="d" or choice=="D":
@@ -42,12 +71,9 @@ def menu():
             return False
         else:
             print("Opción inválida, vuelve a intentar. \n")
-            menu()
+            main()
         cont = input("Continuar(y/n)? ")
         if cont == "y": pass
         else: return False      
-
-def main():
-    menu()
     
 main()
