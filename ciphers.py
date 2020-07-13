@@ -51,12 +51,12 @@ def generateRandomKey(text):
 
 #---------Análisis de frecuencia----------------#
 def frequenceCounter(text):
-    topFrequence = int(input("Quiero el top _ de los caracteres más frecuentes: "))
+    topFrequence = int(input("Ver el top _ de los caracteres más frecuentes: "))
     counts=Counter(text) 
     for c, count in counts.most_common(topFrequence): 
         print('%s: %d' % (c, count)) 
 
-#---------Decifrar Cesar-------------------------#
+#---------Decifrar-------------------------#
 def decrypt(key, text):
     key = ord(key) - 97 # ascii de la llave - desplazamiento
     alphabet = "abcdefghijklmnopqrstuvwxyz "
@@ -70,7 +70,26 @@ def decrypt(key, text):
             decrypted += c
     return decrypted
 
-#---------Decifrar Vigenere-------------------------#
+#---------Decifrar Cesar---------------------#
+def decryptCaesar(text):
+    key = ""
+    alphabet = "abcdefghijklmnopqrstuvwxyz "
+
+    for i in range(len(alphabet)):
+        decoded =decrypt(alphabet[i],text)
+        bag = getBagOfChars(decoded)
+        mostFrequentChar = mostFrequent(bag)
+        if mostFrequentChar == " ":
+            key += alphabet[i]
+
+    print("Llave = ", key)
+    decrypted = ""
+    for i in range(len(text)):
+         decrypted += decrypt(key, text[i])
+    return decrypted
+
+
+#---------Decifrar Vigenere------------------#
 def getNthChars(text, n): 
     return text[n::4]
 
@@ -93,33 +112,15 @@ def decryptVigenere(text):
     subtext3 = getNthChars(text,2)
     subtext4 = getNthChars(text,3)
 
-    for i in range(len(alphabet)):
-        decoded =decrypt(alphabet[i],subtext1)
-        bag = getBagOfChars(decoded)
-        mostFrequentChar = mostFrequent(bag)
-        if mostFrequentChar == " ":
-            key += alphabet[i]
+    subtextList = [subtext1, subtext2, subtext3, subtext4]
 
-    for i in range(len(alphabet)):
-        decoded =decrypt(alphabet[i],subtext2)
-        bag = getBagOfChars(decoded)
-        mostFrequentChar = mostFrequent(bag)
-        if mostFrequentChar == " ":
-            key += alphabet[i]
-
-    for i in range(len(alphabet)):
-        decoded =decrypt(alphabet[i],subtext3)
-        bag = getBagOfChars(decoded)
-        mostFrequentChar = mostFrequent(bag)
-        if mostFrequentChar == " ":
-            key += alphabet[i]
-
-    for i in range(len(alphabet)):
-        decoded =decrypt(alphabet[i],subtext4)
-        bag = getBagOfChars(decoded)
-        mostFrequentChar = mostFrequent(bag)
-        if mostFrequentChar == " ":
-            key += alphabet[i]    
+    for subtext in subtextList: 
+        for i in range(len(alphabet)):
+            decoded =decrypt(alphabet[i],subtext)
+            bag = getBagOfChars(decoded)
+            mostFrequentChar = mostFrequent(bag)
+            if mostFrequentChar == " ":
+                key += alphabet[i]
 
     print("Llave = ", key)
     decrypted = ""
@@ -135,13 +136,14 @@ def main():
         a: Cifrado del cesar
         b: Cifrado de Vigenere 
         c: One Time Pad 
-        d: Descifrar cesar 
-        e: Descifrar vigenere
+        d: Descifrar cesar Brute Force
+        e: Descifrar cesar 
+        f: Descifrar vigenere
         q: Terminar 
         Elegir una opción: """)
         print()
 
-        if choice == "a": #Cifrado del cesar
+        if choice == "a": 
             text = input("Escribe mensaje: ")
             key = input("Letra de la llave: ")
             print()
@@ -149,7 +151,7 @@ def main():
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", caesar(text,key))
             print()
-        elif choice == "b":#Cifrado vigenere
+        elif choice == "b":
             text = input("Escribe mensaje: ")
             keySequence = input("Secuencia de la llave: ")
             print()
@@ -157,17 +159,22 @@ def main():
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", vigenere(text,key))
-        elif choice == "c": #One time pad
+        elif choice == "c": 
             text = input("Escribe mensaje: ")
             print()
             key = generateRandomKey(text) 
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", vigenere(text,key))
-        elif choice=="d": #Decifrar Cesar
+        elif choice=="d": 
             file = open("cipher1.txt")
             text = file.read().replace("\n", " ")
             file.close()
+            prinText = input("Imprimir texto cifrado(y/n)?")
+            if prinText == "y":
+                print(text)
+            input("Presiona enter para continuar...")
+            print()
             frequenceCounter(text)
             while True:
                 key = input("Ingresa la posible llave: ")
@@ -177,21 +184,33 @@ def main():
                     pass
                 else: 
                     break  
-        elif choice=="e": #Decifrar Vigenere
+        elif choice=="e": 
+            file = open("cipher1.txt")
+            text = file.read().replace("\n", " ")
+            file.close()
+            prinText = input("Imprimir texto cifrado(y/n)?")
+            if prinText == "y":
+                print(text)
+            input("Presiona enter para continuar...")
+            print()
+            print ("Texto decifrado: \n", decryptCaesar(text))
+        elif choice=="f": 
             file = open("cipher2.txt")
             text = file.read().replace("\n", " ")
             file.close()
-            #text = "ppqcaxqvekgybnkmazuybngbaljonitszmjyimvragvohtvrauctksgddwuoxitlazuvavvrazcvkbqpiwpou"
+            prinText = input("Imprimir texto cifrado(y/n)?")
+            if prinText == "y":
+                print(text)
+            input("Presiona enter para continuar...")
+            print()
             print ("Texto decifrado: \n", decryptVigenere(text))
-            
-            
-            
-        elif choice=="q" or choice=="Q":
+        elif choice=="q":
             return False
         else:
             print("Opción inválida, vuelve a intentar. \n")
             main()
-        cont = input("Continuar(y/n)? ")
+        print()
+        cont = input("Volver al menu(y/n)? ")
         if cont == "y": pass
         else: return False      
     
