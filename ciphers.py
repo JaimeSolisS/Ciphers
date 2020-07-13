@@ -1,3 +1,5 @@
+import random
+
 #----------Cifrado del Cesar--------------------#
 def caesar(text,key): 
     encripted = "" 
@@ -38,6 +40,16 @@ def vigenere(text, key):
         j+=1
     return encripted  
 
+#----------One time pad --------------------#
+def generateRandomKey(text): 
+    key = list() 
+    text = ''.join([i for i in text if i.isalpha()]) #Solo caracteres en el texto plano
+    for i in range(len(text)):
+        key.append(chr(random.randint(97,122))) 
+    return("" . join(key)) 
+
+#Usar Vigenere function
+
 
 def main():
     while True:
@@ -52,23 +64,29 @@ def main():
         q: Terminar 
         Elegir una opción: """)
 
-        if choice == "a" or choice =="A":
+        if choice == "a":
             print()
             text = input("Escribe mensaje: ")
             key = input("Letra de la llave: ")
-            print ("Texto plano:   ", text )
-            print ("Llave:         ", str(key) )
-            print ("Texto cifrado: ", caesar(text,key) )
+            print ("Texto plano:   ", text)
+            print ("Llave:         ", str(key))
+            print ("Texto cifrado: ", caesar(text,key))
             print()
-        elif choice == "b" or choice =="B":
+        elif choice == "b":
             text = input("Escribe mensaje: ")
             keySequence = input("Secuencia de la llave: ")
             key = generateKey(text, keySequence) 
-            print ("Texto plano:   ", text )
-            print ("Llave:         ", str(key) )
-            print ("Texto cifrado: ", vigenere(text,key)  )
-        elif choice == "c" or choice =="C":
-            pass
+            print ("Texto plano:   ", text)
+            print ("Llave:         ", str(key))
+            print ("Texto cifrado: ", vigenere(text,key))
+        elif choice == "c":
+            text = input("Escribe mensaje: ")
+            #keySequence = input("Secuencia de la llave: ")
+            print()
+            key = generateRandomKey(text) 
+            print ("Texto plano:   ", text)
+            print ("Llave:         ", str(key))
+            print ("Texto cifrado: ", vigenere(text,key))
         elif choice=="d" or choice=="D":
             pass
         elif choice=="q" or choice=="Q":
