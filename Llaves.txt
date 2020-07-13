@@ -1,0 +1,2 @@
+Llave Caesar = k
+Llave Vigenere = hack
