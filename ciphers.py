@@ -14,24 +14,28 @@ def caesar(text,key):
 #----------Cifrado de Vigenere--------------------#
 def generateKey(text, key): 
     key = list(key) 
+    text = ''.join([i for i in text if i.isalpha()]) #Solo caracteres en el texto plano
     if len(text) == len(key): 
         return(key) 
     else: 
         for i in range(len(text) - len(key)):
-                if text[i].isalpha():
-                    key.append(key[i % len(key)]) 
-                else: continue
+            key.append(key[i % len(key)]) 
     return("" . join(key)) 
 
 def vigenere(text, key): 
     encripted = "" 
+    j = 0 #index para la llave 
     for i in range(len(text)): 
         c = text[i] # cada caracter
         if c.isalpha(): #si el caracter es una letra hacemos la transposicion, si no, regresamos el caracter
-            if (ord(c) + ord(key[i]) - 97) > 122: # si la operación da igual a +123, se reinicia el alfabeto  
-                encripted += chr((ord(c) + ord(key[i]) - 97 )-26) 
-            else: encripted += chr((ord(c) + ord(key[i]) - 97 )) #ascii del caracter del mensaje + ascii de la llave - 97(ascii de 'a')
-        else: encripted += c
+            if (ord(c) + ord(key[j]) - 97) > 122: # si la operación da igual a +123, se reinicia el alfabeto  
+                encripted += chr((ord(c) + ord(key[j]) - 97 )-26) 
+            else: encripted += chr((ord(c) + ord(key[j]) - 97 )) #ascii del caracter del mensaje + ascii de la llave - 97(ascii de 'a') 
+        else: 
+            encripted += c
+            j-=1
+
+        j+=1
     return encripted  
 
 
