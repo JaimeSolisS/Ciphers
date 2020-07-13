@@ -37,7 +37,6 @@ def vigenere(text, key):
         else: 
             encripted += c
             j-=1
-
         j+=1
     return encripted  
 
@@ -54,26 +53,79 @@ def generateRandomKey(text):
 def frequenceCounter(text):
     topFrequence = int(input("Quiero el top _ de los caracteres más frecuentes: "))
     counts=Counter(text) 
-    for letter, count in counts.most_common(topFrequence): 
-        print('%s: %d' % (letter, count)) 
+    for c, count in counts.most_common(topFrequence): 
+        print('%s: %d' % (c, count)) 
 
-#---------Decifra Cesar-------------------------#
-def decrypt(key, message):
+#---------Decifrar Cesar-------------------------#
+def decrypt(key, text):
     key = ord(key) - 97 # ascii de la llave - desplazamiento
     alphabet = "abcdefghijklmnopqrstuvwxyz "
-    result = ""
+    decrypted = ""
 
-    for letter in message:
-        if letter in alphabet: 
-            letter_index = (alphabet.find(letter) - key) % len(alphabet)
-            result += alphabet[letter_index]
+    for c in text:
+        if c in alphabet: 
+            index = (alphabet.find(c) - key) % len(alphabet)
+            decrypted += alphabet[index]
         else:
-            result += letter
+            decrypted += c
+    return decrypted
 
-    return result
+#---------Decifrar Vigenere-------------------------#
+def getNthChars(text, n): 
+    return text[n::4]
 
+def getBagOfChars(decoded):
+    bag = ""
+    for i in range(len(decoded)):
+        bag += decoded[i]
+    return bag
 
+def mostFrequent(text):
+    counts=Counter(text) 
+    for c, count in counts.most_common(1): 
+        return c
 
+def decryptVigenere(text):
+    key = ""
+    alphabet = "abcdefghijklmnopqrstuvwxyz "
+    subtext1 = getNthChars(text,0)
+    subtext2 = getNthChars(text,1)
+    subtext3 = getNthChars(text,2)
+    subtext4 = getNthChars(text,3)
+
+    for i in range(len(alphabet)):
+        decoded =decrypt(alphabet[i],subtext1)
+        bag = getBagOfChars(decoded)
+        mostFrequentChar = mostFrequent(bag)
+        if mostFrequentChar == " ":
+            key += alphabet[i]
+
+    for i in range(len(alphabet)):
+        decoded =decrypt(alphabet[i],subtext2)
+        bag = getBagOfChars(decoded)
+        mostFrequentChar = mostFrequent(bag)
+        if mostFrequentChar == " ":
+            key += alphabet[i]
+
+    for i in range(len(alphabet)):
+        decoded =decrypt(alphabet[i],subtext3)
+        bag = getBagOfChars(decoded)
+        mostFrequentChar = mostFrequent(bag)
+        if mostFrequentChar == " ":
+            key += alphabet[i]
+
+    for i in range(len(alphabet)):
+        decoded =decrypt(alphabet[i],subtext4)
+        bag = getBagOfChars(decoded)
+        mostFrequentChar = mostFrequent(bag)
+        if mostFrequentChar == " ":
+            key += alphabet[i]    
+
+    print("Llave = ", key)
+    decrypted = ""
+    for i in range(len(text)):
+         decrypted += decrypt(key[i%4], text[i])
+    return decrypted
 
 def main():
     while True:
@@ -81,7 +133,7 @@ def main():
         print()
         choice = input("""
         a: Cifrado del cesar
-        b: Vigenere 
+        b: Cifrado de Vigenere 
         c: One Time Pad 
         d: Descifrar cesar 
         e: Descifrar vigenere
@@ -89,7 +141,7 @@ def main():
         Elegir una opción: """)
         print()
 
-        if choice == "a":
+        if choice == "a": #Cifrado del cesar
             text = input("Escribe mensaje: ")
             key = input("Letra de la llave: ")
             print()
@@ -97,7 +149,7 @@ def main():
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", caesar(text,key))
             print()
-        elif choice == "b":
+        elif choice == "b":#Cifrado vigenere
             text = input("Escribe mensaje: ")
             keySequence = input("Secuencia de la llave: ")
             print()
@@ -105,14 +157,14 @@ def main():
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", vigenere(text,key))
-        elif choice == "c":
+        elif choice == "c": #One time pad
             text = input("Escribe mensaje: ")
             print()
             key = generateRandomKey(text) 
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", vigenere(text,key))
-        elif choice=="d":
+        elif choice=="d": #Decifrar Cesar
             file = open("cipher1.txt")
             text = file.read().replace("\n", " ")
             file.close()
@@ -125,6 +177,14 @@ def main():
                     pass
                 else: 
                     break  
+        elif choice=="e": #Decifrar Vigenere
+            file = open("cipher2.txt")
+            text = file.read().replace("\n", " ")
+            file.close()
+            #text = "ppqcaxqvekgybnkmazuybngbaljonitszmjyimvragvohtvrauctksgddwuoxitlazuvavvrazcvkbqpiwpou"
+            print ("Texto decifrado: \n", decryptVigenere(text))
+            
+            
             
         elif choice=="q" or choice=="Q":
             return False
