@@ -1,4 +1,5 @@
 import random
+from collections import Counter
 
 #----------Cifrado del Cesar--------------------#
 def caesar(text,key): 
@@ -47,8 +48,31 @@ def generateRandomKey(text):
     for i in range(len(text)):
         key.append(chr(random.randint(97,122))) 
     return("" . join(key)) 
-
 #Usar Vigenere function
+
+#---------Análisis de frecuencia----------------#
+def frequenceCounter(text):
+    topFrequence = int(input("Quiero el top _ de los caracteres más frecuentes: "))
+    counts=Counter(text) 
+    for letter, count in counts.most_common(topFrequence): 
+        print('%s: %d' % (letter, count)) 
+
+#---------Decifra Cesar-------------------------#
+def decrypt(key, message):
+    key = ord(key) - 97 # ascii de la llave - desplazamiento
+    alphabet = "abcdefghijklmnopqrstuvwxyz "
+    result = ""
+
+    for letter in message:
+        if letter in alphabet: 
+            letter_index = (alphabet.find(letter) - key) % len(alphabet)
+            result += alphabet[letter_index]
+        else:
+            result += letter
+
+    return result
+
+
 
 
 def main():
@@ -63,11 +87,12 @@ def main():
         e: Descifrar vigenere
         q: Terminar 
         Elegir una opción: """)
+        print()
 
         if choice == "a":
-            print()
             text = input("Escribe mensaje: ")
             key = input("Letra de la llave: ")
+            print()
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", caesar(text,key))
@@ -75,20 +100,32 @@ def main():
         elif choice == "b":
             text = input("Escribe mensaje: ")
             keySequence = input("Secuencia de la llave: ")
+            print()
             key = generateKey(text, keySequence) 
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", vigenere(text,key))
         elif choice == "c":
             text = input("Escribe mensaje: ")
-            #keySequence = input("Secuencia de la llave: ")
             print()
             key = generateRandomKey(text) 
             print ("Texto plano:   ", text)
             print ("Llave:         ", str(key))
             print ("Texto cifrado: ", vigenere(text,key))
-        elif choice=="d" or choice=="D":
-            pass
+        elif choice=="d":
+            file = open("cipher1.txt")
+            text = file.read().replace("\n", " ")
+            file.close()
+            frequenceCounter(text)
+            while True:
+                key = input("Ingresa la posible llave: ")
+                print ("Texto decifrado: \n", decrypt(key, text))
+                correct = input("Intentar con otra llave(y/n)? ")
+                if correct == "y": 
+                    pass
+                else: 
+                    break  
+            
         elif choice=="q" or choice=="Q":
             return False
         else:
