@@ -9,8 +9,8 @@ A python implementation of 3 Ciphers. Includes a console menu for encoding and d
 3. One time pad: The cipher aks for a message and return a key and the ciphertext. The key is generated randomly.
 
 ## Decrypt
-4. Decrypts the file cipher1.txt. This uses a cesar cipher. It can be decrypted with a brute force attack or a frequency analysis. The decrypted text is stored in cipher1_decrypted.text
-5. Decrypt the file cipher2.txt. It uses valid 4-letter key encryption. It does not use letter statistics as most do, but an iterative frecuency analysis.
+4. Ceasar: Decrypts the file cipher1.txt. This uses a cesar cipher. It can be decrypted with a brute force attack or a frequency analysis. The decrypted text is stored in cipher1_decrypted.text
+5. Vigenere: Decrypts the file cipher2.txt. It uses valid 4-letter key encryption. It does not use letter statistics as most do, but an iterative frecuency analysis.
 
 ## Usage 
 `python3 ciphers.py`
