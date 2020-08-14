@@ -9,10 +9,8 @@
 # Periodo Verano 2020
 #  
 # Jaime Solis                A00759756 
-# Ruben Castillo Torres      A01610711
-# Sebastián González Tafoya  A01233416
-#                                        
-# Fecha de entrega  13/07/2020.
+#                                
+# Fecha de entrega:  13/07/2020.
 #
 
 import random, os
@@ -111,7 +109,7 @@ def decryptCaesar(text):
     decrypted = ""
     for i in range(len(text)):
          decrypted += decrypt(key, text[i]) #llamar la función decrypt y decifrar todos los caracteres
-    f= open("cipher1_Descifrado.txt","w+")
+    f= open("cipher1_decrypted.txt","w+")
     f.write("Texto plano: \n%s\r\n" % decrypted)
     return decrypted
 
@@ -147,106 +145,107 @@ def decryptVigenere(text): #Es los mismo solo que hay que dividir el texto cifra
     decrypted = ""
     for i in range(len(text)):
          decrypted += decrypt(key[i%4], text[i])
-    f= open("cipher2_Descifrado.txt","w+")
+    f= open("cipher2_decrypted.txt","w+")
     f.write("Texto plano: \n%s\r\n" % decrypted)
     return decrypted
 
+#---------Menu principal------------------#
 def main():
     while True:
         os.system('clear')
         print("************Ciphers**************")
         choice = input("""
-        a: Cifrado del cesar
-        b: Cifrado de Vigenere 
-        c: One Time Pad 
-        d: Descifrar cesar Brute Force
-        e: Descifrar cesar 
-        f: Descifrar vigenere
-        q: Terminar 
-        Elegir una opción: """)
+        a: Ceasar encoder
+        b: Vigenere encoder
+        c: One Time Pad encoder
+        d: Cesaar decoder Brute Force
+        e: Ceasar decoder Frecuency Analysis 
+        f: Vigenere decoder
+        q: Quit 
+        Choose an option: """)
         print()
         if choice == "a": 
-            print("************ Cifrado del cesar **************")
-            text = input("Escribe mensaje: ")
-            key = input("Letra de la llave: ")
+            print("************ Caesar cipher **************")
+            text = input("Write a message: ")
+            key = input("Key letter: ")
             print()
-            print ("Texto plano:   ", text)
-            print ("Llave:          ", end= "")
+            print ("Plain Text:   ", text)
+            print ("Key:          ", end= "")
             for i in range(len(text)):
                 if text[i] in ALPHABET: print (str(key), end="")
                 else: print(" ", end="")
-            print ("\nTexto cifrado: ", caesar(text,key))
+            print ("\nCiphertext: ", caesar(text,key))
             print()
         elif choice == "b":
-            print("************ Cifrado de Vigenere **************")
-            text = input("Escribe mensaje: ")
-            keySequence = input("Secuencia de la llave: ")
+            print("************ Vigenere cipher **************")
+            text = input("Write a message: ")
+            keySequence = input("Write a key sequence: ")
             print()
             key = generateKey(text, keySequence) 
-            print ("Texto plano:   ", text)
-            print ("Llave:          ", end= "")
+            print ("Plain text:   ", text)
+            print ("Key:          ", end= "")
             j = 0
             for i in range(len(text)):
                 if text[i] in ALPHABET: print (str(key[j]), end=""); j+=1
                 else: print(" ", end=""); 
-            print ("\nTexto cifrado: ", vigenere(text,key))
+            print ("\nCiphertext: ", vigenere(text,key))
         elif choice == "c": 
-            print("************ Cifrado One time Pad **************")
-            text = input("Escribe mensaje: ")
+            print("************  One time Pad **************")
+            text = input("Write a message: ")
             print()
             key = generateRandomKey(text) 
-            print ("Texto plano:   ", text)
-            print ("Llave:          ", end= "")
+            print ("Plain text:   ", text)
+            print ("Key:          ", end= "")
             j = 0
             for i in range(len(text)):
                 if text[i] in ALPHABET: print (str(key[j]), end=""); j+=1
                 else: print(" ", end=""); 
-            print ("\nTexto cifrado: ", vigenere(text,key))
+            print ("\nCiphertext: ", vigenere(text,key))
         elif choice=="d": 
-            print("************ Rompiendo el algoritmo del cesar por 'fuerza bruta' **************")
+            print("************ Break Ceasar Cipher brute force **************")
             file = open("cipher1.txt")
             text = file.read().replace("\n", " ")
             file.close()
-            prinText = input("Imprimir texto cifrado(y/n)?")
+            prinText = input("Print ciphertext(y/n)?")
             if prinText == "y":
                 print(text)
-                input("Presiona enter para continuar...")
+                input("Press enter to continue...")
             print()
             frequenceCounter(text)
             while True:
-                key = input("Ingresa la posible llave: ")
-                print ("Texto decifrado: \n", decrypt(key, text))
-                correct = input("Intentar con otra llave(y/n)? ")
+                key = input("Write a possible key letter: ")
+                print ("Decrypted text: \n", decrypt(key, text))
+                correct = input("Try with another letter(y/n)? ")
                 if correct == "y": pass
                 else: break  
         elif choice=="e": 
-            print("************ Rompiendo el algoritmo del cesar **************")
+            print("************ Break Ceasar Cipher **************")
             file = open("cipher1.txt")
             text = file.read().replace("\n", " ")
             file.close()
-            prinText = input("Imprimir texto cifrado(y/n)?")
+            prinText = input("Print ciphertext(y/n)?")
             if prinText == "y":
                 print(text)
-                input("Presiona enter para continuar...")
+                input("Press enter to continue...")
             print()
-            print ("Texto decifrado: \n", decryptCaesar(text))
+            print ("Decrypted text: \n", decryptCaesar(text))
         elif choice=="f": 
-            print("************ Rompiendo el algoritmo de Vigenere **************")
+            print("************ Break Vigenere Cipher **************")
             file = open("cipher2.txt")
             text = file.read().replace("\n", " ")
             file.close()
-            prinText = input("Imprimir texto cifrado(y/n)?")
+            prinText = input("Print ciphertext(y/n)?")
             if prinText == "y":
                 print(text)
-                input("Presiona enter para continuar...")
+                input("Press enter to continue...")
             print()
-            print ("Texto decifrado: \n", decryptVigenere(text))
+            print ("Decrypted text: \n", decryptVigenere(text))
         elif choice=="q":return False
         else:
-            print("Opción inválida, vuelve a intentar. \n")
+            print("Invalid option, try again. \n")
             main()
         print()
-        cont = input("Volver al menu(y/n)? ")
+        cont = input("Go back to menu(y/n)? ")
         if cont == "y": pass
         else: return False    
 
